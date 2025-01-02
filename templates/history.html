@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Entries</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 2em;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .date-header {
+            margin-top: 2em;
+            font-size: 1.5em;
+            color: #333;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #eee;
+            padding: 2px 8px;
+            margin: 2px;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+
+<body>
+    {{range .}}
+    <h2 class="date-header">{{.Year}}/{{printf "%02d" .Month}}/{{printf "%02d" .Day}}</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Summary</th>
+                <th>Tags</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .Entries}}
+            <tr>
+                <td>{{.Summary}}</td>
+                <td>
+                    {{range .Tags}}
+                    <span class="tag">{{.S}}</span>
+                    {{end}}
+                </td>
+                <td>
+                    <a href="/edit/{{.ID}}">Edit</a>
+                    <form action="/delete/{{.ID}}" method="POST">
+                        <button type="submit">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+    {{end}}
+</body>
+
+</html>

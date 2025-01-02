@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{.title}}</title>
+</head>
+
+<body>
+    <h1>{{.title}}</h1>
+    <form {{if eq .mode "create" }} action="/create" {{else if eq .mode "edit" }} action="/edit/{{.entryId}}" {{end}}
+        method="POST">
+        <div>
+            <label for="userText">Enter your text:</label>
+            <textarea id="userText" name="userText" {{if eq .mode "create" }} placeholder="Type your text here..."
+                {{end}} required>{{if eq .mode "edit" }}{{.text}}{{end}}</textarea>
+        </div>
+        <button type="submit">Save</button>
+    </form>
+</body>
+
+</html>
