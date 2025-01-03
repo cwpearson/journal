@@ -6,86 +6,65 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"time"
 
 	"gorm.io/gorm"
 
-	"github.com/cwpearson/journal/config"
 	"github.com/cwpearson/journal/database"
 	"github.com/cwpearson/journal/models"
 	"github.com/cwpearson/journal/ollama"
 	"github.com/cwpearson/journal/tags"
 )
 
-func GetForDate(year, month, day int) ([]models.Entry, error) {
+func Create(year, month, day int, text string) (*models.Entry, error) {
 	db := database.Get()
-	res := []models.Entry{}
-	err := db.Where("year = ?", year).Where("month = ?", month).Where("day = ?", day).Find(&res).Error
-	if err != nil && err != gorm.ErrRecordNotFound {
+	database.Lock()
+	defer database.Unlock()
+
+	entry := &models.Entry{
+		Year:  year,
+		Month: month,
+		Day:   day,
+	}
+	err := db.Create(&entry).Error
+	if err != nil {
 		return nil, err
 	}
-	return res, nil
-}
 
-func Create(client *ollama.Client, text string) (*models.Entry, error) {
-	db := database.Get()
-
-	now := time.Now()
-
-	year := now.Year()        // Returns year as int
-	month := int(now.Month()) // Month() returns time.Month, so we cast to int
-	day := now.Day()          // Returns day as int
-
-	entryDir := filepath.Join(config.DataDir(),
-		fmt.Sprintf("%04d", year),
-		fmt.Sprintf("%02d", month),
-		fmt.Sprintf("%02d", day),
-	)
-
+	textPath := TextPath(entry)
+	entryDir := filepath.Dir(textPath)
 	log.Println("create", entryDir)
-	err := os.MkdirAll(entryDir, 0755)
+	err = os.MkdirAll(entryDir, 0755)
 	if err != nil && !os.IsExist(err) {
 		return nil, err
 	}
 
-	// find the largest N
-	others, err := GetForDate(year, month, day)
-	if err != nil {
-		return nil, err
-	}
-	nextN := 0
-	if len(others) > 0 {
-		for _, e := range others {
-			if e.N > nextN {
-				nextN = e.N
-			}
-		}
-		nextN++
-	}
-
-	textPath := filepath.Join(entryDir, fmt.Sprintf("%03d.txt", nextN))
 	log.Println("write", textPath)
 	err = os.WriteFile(textPath, []byte(text), 0644)
 	if err != nil {
 		return nil, err
 	}
 
-	database.Lock()
-	defer database.Unlock()
-	entry := &models.Entry{
-		Year:  year,
-		Month: month,
-		Day:   day,
-		N:     nextN,
-	}
-	err = db.Create(&entry).Error
+	return entry, nil
+}
+
+func Analyze(entry *models.Entry, client *ollama.Client) error {
+
+	// load text
+	bytes, err := os.ReadFile(TextPath(entry))
 	if err != nil {
-		os.Remove(textPath) // ignore errors
-		return nil, err
+		return err
 	}
+	text := string(bytes)
 
 	// generate and add tags
 	go func() {
+
+		// clear keywords
+		err = SetKeywords(entry, []string{})
+		if err != nil {
+			log.Println("SetKeywords error:", err)
+		}
+
 		kwds, err := client.Keywords(text)
 		if err != nil {
 			log.Println("keywords error:", err)
@@ -96,6 +75,11 @@ func Create(client *ollama.Client, text string) (*models.Entry, error) {
 
 	// generate and add summary
 	go func() {
+		// clear summary
+		if err := SetSummary(entry, ""); err != nil {
+			log.Println("SetSummary error:", err)
+		}
+
 		summary, err := client.Summary(text)
 		if err != nil {
 			log.Println("summary error:", err)
@@ -108,7 +92,7 @@ func Create(client *ollama.Client, text string) (*models.Entry, error) {
 		}
 	}()
 
-	return entry, nil
+	return nil
 }
 
 func AddKeyword(entry *models.Entry, keyword string) error {

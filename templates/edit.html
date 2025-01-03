@@ -4,20 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/common.css">
+    {{template "header-css" .}}
+    <link rel="stylesheet" href="/static/css/edit.css">
     <title>{{.title}}</title>
 </head>
 
 <body>
+    {{template "header" .}}
     <h1>{{.title}}</h1>
-    <form {{if eq .mode "create" }} action="/create" {{else if eq .mode "edit" }} action="/edit/{{.entryId}}" {{end}}
-        method="POST">
-        <div>
-            <label for="userText">Enter your text:</label>
-            <textarea id="userText" name="userText" {{if eq .mode "create" }} placeholder="Type your text here..."
-                {{end}} required>{{if eq .mode "edit" }}{{.text}}{{end}}</textarea>
-        </div>
-        <button type="submit">Save</button>
-    </form>
+    <div class="form-container">
+        <form action="/{{.year}}/{{.month}}/{{.day}}" method="POST">
+            <textarea id="userText" name="userText" {{if eq .text "" }} placeholder="Your thoughts for today..." {{end}}
+                required>{{if ne .text "" }}{{.text}}{{end}}</textarea>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+
+    <script>
+        window.onload = function () {
+            const textarea = document.getElementById('userText');
+            // Set cursor position to end of content
+            textarea.focus();
+            textarea.selectionStart = textarea.selectionEnd = textarea.value.length;
+        }
+
+
+        const textarea = document.getElementById('userText');
+
+        // Function to adjust height
+        function autoExpand() {
+            // Reset height to auto to get the correct scrollHeight
+            textarea.style.height = 'auto';
+            // Set the height to match the content
+            textarea.style.height = textarea.scrollHeight + 'px';
+        }
+
+        // Add event listeners
+        textarea.addEventListener('input', autoExpand);
+
+        // Initial call to set correct height for any pre-filled content
+        autoExpand();
+
+
+    </script>
 </body>
 
 </html>

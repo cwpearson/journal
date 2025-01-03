@@ -8,7 +8,6 @@ import (
 
 	"gorm.io/gorm"
 
-	"github.com/cwpearson/journal/config"
 	"github.com/cwpearson/journal/database"
 	"github.com/cwpearson/journal/models"
 )
@@ -44,22 +43,20 @@ func Delete(entryId uint) error {
 	}
 
 	// erase file
-	year, month, date, name := PathComponents(entry)
-	textPath := filepath.Join(config.DataDir(), year, month, date, name)
+	textPath := TextPath(entry)
+	log.Println("remove", textPath)
 	err = os.Remove(textPath)
 	if err != nil {
 		return err
 	}
 
-	err = removeIfEmpty(filepath.Join(config.DataDir(), year, month, date))
+	monthDir := filepath.Dir(textPath)
+	err = removeIfEmpty(monthDir)
 	if err != nil {
 		return err
 	}
-	err = removeIfEmpty(filepath.Join(config.DataDir(), year, month))
-	if err != nil {
-		return err
-	}
-	err = removeIfEmpty(filepath.Join(config.DataDir(), year))
+	yearDir := filepath.Dir(monthDir)
+	err = removeIfEmpty(yearDir)
 	if err != nil {
 		return err
 	}

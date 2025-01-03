@@ -3,7 +3,6 @@ package main
 import (
 	"io"
 	"log"
-	"net/http"
 	"os"
 	"text/template"
 
@@ -56,13 +55,14 @@ func main() {
 	}
 	e.Renderer = t
 
-	e.GET("/", func(c echo.Context) error { return c.Redirect(http.StatusSeeOther, "/create") })
-	e.GET("/create", handlers.CreateGet)
-	e.POST("/create", handlers.CreatePost)
+	e.GET("/", handlers.RootGet)
 	e.GET("/history", handlers.HistoryGet)
-	e.GET("/edit/:id", handlers.EditGet)
-	e.POST("/edit/:id", handlers.EditPost)
+	e.GET("/:year/:month/:day", handlers.EditGet)
+	e.POST("/:year/:month/:day", handlers.EditPost)
 	e.POST("/delete/:id", handlers.DeletePost)
+
+	staticGroup := e.Group("/static")
+	staticGroup.Static("/", "static")
 
 	e.Logger.Fatal(e.Start(":8080"))
 }

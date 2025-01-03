@@ -35,6 +35,9 @@ func (c *Client) Keywords(text string) ([]string, error) {
 					},
 				},
 			},
+			"required": []string{
+				"keywords",
+			},
 		},
 		// Format: map[string]interface{}{
 		// 	"type": "array",

@@ -16,5 +16,6 @@ func NewClientFromConfig() *Client {
 	return &Client{
 		Url:   "http://localhost:11434",
 		Model: "llama3.2:3b",
+		// Model: "llama3.2:1b",
 	}
 }

@@ -29,6 +29,9 @@ func (c *Client) Summary(text string) (string, error) {
 					"type": "string",
 				},
 			},
+			"required": []string{
+				"summary",
+			},
 		},
 		Options: map[string]interface{}{
 			"temperature": 0.1,
