@@ -1,21 +1,18 @@
 package ollama
 
-type Client struct {
-	Url   string
-	Model string
-}
+import "github.com/cwpearson/journal/config"
 
-func NewClient(url, model string) *Client {
-	return &Client{
-		Url:   url,
-		Model: model,
-	}
+type Client struct {
+	Url      string
+	Model    string
+	Insecure bool
 }
 
 func NewClientFromConfig() *Client {
 	return &Client{
-		Url:   "http://localhost:11434",
+		Url:   config.OllamaUrl(),
 		Model: "llama3.2:3b",
 		// Model: "llama3.2:1b",
+		Insecure: config.OllamaInsecure(),
 	}
 }
