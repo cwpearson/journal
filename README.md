@@ -5,6 +5,9 @@ go mod tidy
 
 JOURNAL_OLLAMA_URL=http://localhost:11434 \
 JOURNAL_OLLAMA_INSECURE=1 \
+JOURNAL_SESSION_KEY=zsdftyhghuijk345e6r7t8y9hio \
+JOURNAL_PASSWORD=abcd1234 \
+JOURNAL_SESSION_SECURE=0 \
 go run main.go
 ```
 
@@ -24,6 +27,10 @@ docker run --rm -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/olla
 ```yaml
 
 ```
+
+## Configuration Options
+
+* `JOURNAL_SESSION_KEY`: the key used to secure the cookie session
 
 ## Roadmap
 

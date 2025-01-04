@@ -57,3 +57,26 @@ func Password() string {
 		panic(fmt.Sprintf("Set %s", key))
 	}
 }
+
+// returns JOURNAL_SESSION_KEY or panics
+func SessionKey() string {
+	key := "JOURNAL_SESSION_KEY"
+	val, ok := os.LookupEnv(key)
+	if ok && val != "" {
+		return val
+	} else {
+		panic(fmt.Sprintf("Set %s", key))
+	}
+}
+
+// returns true iff JOURNAL_SESSION_SECURE is truthy
+func SessionSecure() bool {
+	val, ok := os.LookupEnv("JOURNAL_SESSION_SECURE")
+	if ok {
+		lower := strings.ToLower(val)
+		if lower == "0" || lower == "off" || lower == "no" || lower == "false" {
+			return false
+		}
+	}
+	return true
+}

@@ -35,6 +35,7 @@ func main() {
 
 	database.Init()
 	database.Get().AutoMigrate(&models.Entry{}, &models.Tag{})
+	handlers.Init()
 
 	client := ollama.NewClientFromConfig()
 	if err := client.Pull(); err != nil {
@@ -55,11 +56,15 @@ func main() {
 	}
 	e.Renderer = t
 
-	e.GET("/", handlers.RootGet)
-	e.GET("/history", handlers.HistoryGet)
-	e.GET("/:year/:month/:day", handlers.EditGet)
-	e.POST("/:year/:month/:day", handlers.EditPost)
-	e.POST("/delete/:id", handlers.DeletePost)
+	e.GET("/login", handlers.LoginGet)
+	e.POST("/login", handlers.LoginPost)
+
+	e.GET("/", handlers.RootGet, handlers.AuthMiddleware)
+	e.GET("/history", handlers.HistoryGet, handlers.AuthMiddleware)
+	e.GET("/:year/:month/:day", handlers.EditGet, handlers.AuthMiddleware)
+	e.POST("/:year/:month/:day", handlers.EditPost, handlers.AuthMiddleware)
+	e.POST("/delete/:id", handlers.DeletePost, handlers.AuthMiddleware)
+	e.POST("/logout", handlers.LogoutPost, handlers.AuthMiddleware)
 
 	staticGroup := e.Group("/static")
 	staticGroup.Static("/", "static")
