@@ -6,18 +6,18 @@ import (
 	"strings"
 )
 
-// returns value of JOURNAL_OLLAMA_CONFIG or journal_config
+// returns value of JOURNAL_CONFIG_DIR or journal_config
 func ConfigDir() string {
-	val, ok := os.LookupEnv("JOURNAL_OLLAMA_CONFIG")
+	val, ok := os.LookupEnv("JOURNAL_CONFIG_DIR")
 	if !ok || val == "" {
 		return "journal_config"
 	}
 	return val
 }
 
-// returns value of JOURNAL_OLLAMA_DATA or journal_data
+// returns value of JOURNAL_DATA_DIR or journal_data
 func DataDir() string {
-	val, ok := os.LookupEnv("JOURNAL_OLLAMA_DATA")
+	val, ok := os.LookupEnv("JOURNAL_DATA_DIR")
 	if !ok || val == "" {
 		return "journal_data"
 	}
