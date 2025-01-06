@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -69,5 +70,6 @@ func main() {
 	staticGroup := e.Group("/static")
 	staticGroup.Static("/", "static")
 
-	e.Logger.Fatal(e.Start(":8080"))
+	addr := fmt.Sprintf(":%s", config.Port())
+	e.Logger.Fatal(e.Start(addr))
 }

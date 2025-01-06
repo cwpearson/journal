@@ -24,6 +24,15 @@ func DataDir() string {
 	return val
 }
 
+// returns value of JOURNAL_PORT or 8080
+func Port() string {
+	val, ok := os.LookupEnv("JOURNAL_PORT")
+	if !ok || val == "" {
+		return "8080"
+	}
+	return val
+}
+
 // returns true iff JOURNAL_OLLAMA_INSECURE is truthy
 func OllamaInsecure() bool {
 	val, ok := os.LookupEnv("JOURNAL_OLLAMA_INSECURE")
