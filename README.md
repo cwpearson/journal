@@ -44,6 +44,9 @@ The following configuration options are optional
 
 ## Roadmap
 
+- Footer
+  - [ ] Build SHA
+  - [ ] Build date
 - Images
 - Config
   - [ ] `JOURNAL_SITE_NAME`
@@ -51,6 +54,9 @@ The following configuration options are optional
   - [x] `JOURNAL_OLLAMA_URL`
   - [x] `JOURNAL_OLLAMA_INSECURE`
   - [x] `JOURNAL_PORT`
+- Tags
+  - [ ] Clicking on tags on history page
+  - [ ] Retrieve entries by tag
 - Docker
   - [x] ghcr.io publish
 - Ollama
