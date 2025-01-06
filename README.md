@@ -32,12 +32,15 @@ docker run --rm -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/olla
 
 You must provide the following
 
-* `JOURNAL_SESSION_KEY`: the key used to secure the cookie session
+* `JOURNAL_SESSION_KEY`: the key used to secure the cookie session.
+* `JOURNAL_PASSWORD`: the password needed to authenticate in the browser.
 
 The following configuration options are optional
 
 * `JOURNAL_PORT`: what port for the server to listen on (default: `8080`)
 * `JOURNAL_SESSION_SECURE`: set to `0` if you are accessing the app without HTTPS (default `1`)
+* `JOURNAL_OLLAMA_URL`: where to access Ollama enpoints
+* `JOURNAL_OLLAMA_INSECURE`: set to `1` if access Ollama over http
 
 ## Roadmap
 
@@ -51,7 +54,7 @@ The following configuration options are optional
 - Docker
   - [x] ghcr.io publish
 - Ollama
-  - [ ] better handling of 
+  - [ ] better handling of missing / errored Ollama
 
 ## Setting up GHCR Publish
 
