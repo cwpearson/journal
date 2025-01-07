@@ -12,3 +12,9 @@ type Entry struct {
 	Summary string
 	Tags    []Tag `gorm:"many2many:entry_tags;"`
 }
+
+type Tag struct {
+	gorm.Model
+	S       string
+	Entries []Entry `gorm:"many2many:entry_tags;"`
+}

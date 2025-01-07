@@ -13,6 +13,10 @@
 <body>
     {{template "header" .}}
 
+    {{ if .tag }}
+    <h1>{{.tag}}</h1>
+    {{ end }}
+
     <h2 class="date-header"></h2>
     <table>
         <thead>
@@ -24,7 +28,7 @@
             </tr>
         </thead>
         <tbody>
-            {{range .}}
+            {{range .entries}}
             <tr>
                 <td><a href="/{{.Year}}/{{.Month}}/{{.Day}}">
                         {{.Year}}/{{printf "%02d" .Month}}/{{printf "%02d" .Day}}</a>
@@ -32,7 +36,7 @@
                 <td>{{.Summary}}</td>
                 <td>
                     {{range .Tags}}
-                    <span class="tag">{{.S}}</span>
+                    <a href="/history?tag={{.ID}}"><span class="tag">{{.S}}</span></a>
                     {{end}}
                 </td>
                 <td>
