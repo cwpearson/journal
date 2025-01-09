@@ -18,7 +18,8 @@ func (c *Client) Keywords(text string) ([]string, error) {
 			{
 				Role: "system",
 				// Content: "You produce keywords for text. Return as JSON.",
-				Content: "Produce the most important keywords for text. Return as JSON.", // llama3.2:3b
+				// Content: "Produce the most important keywords for text. Return as JSON.", // llama3.2:3b
+				Content: "Produce six keywords for text. Return as JSON.", // llama3.2:3b
 			},
 			{
 				Role:    "user",
