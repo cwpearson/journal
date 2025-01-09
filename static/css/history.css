@@ -1,30 +1,127 @@
-table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: 2em;
-}
-
-th,
-td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
-
-th {
-    background-color: #f2f2f2;
+h1 {
+    margin: 24px 0;
+    color: #333;
 }
 
 .date-header {
-    margin-top: 2em;
+    margin: 32px 0 16px;
     font-size: 1.5em;
     color: #333;
 }
 
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 2em;
+    background: white;
+}
+
+th,
+td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #444;
+}
+
 .tag {
     display: inline-block;
-    background: #eee;
-    padding: 2px 8px;
+    background: #f0f0f0;
+    color: #444;
+    padding: 4px 12px;
     margin: 2px;
-    border-radius: 3px;
+    border-radius: 16px;
+    font-size: 0.9em;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.tag:hover {
+    background: #e0e0e0;
+}
+
+.delete-btn {
+    background: #ff4444;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: background-color 0.2s;
+}
+
+.delete-btn:hover {
+    background: #ff0000;
+}
+
+.entry-link {
+    color: #2196F3;
+    text-decoration: none;
+}
+
+.entry-link:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+
+    /* Hide table headers on mobile */
+    thead {
+        display: none;
+    }
+
+    /* Convert table rows to cards */
+    tr {
+        display: block;
+        margin-bottom: 16px;
+        border: 1px solid #eee;
+        border-radius: 8px;
+        background: white;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 0.5rem;
+        margin: 0.5rem;
+    }
+
+    td {
+        display: block;
+        border: none;
+        padding: 0.25rem 0;
+    }
+
+    /* Add labels for each cell */
+    td:nth-of-type(1)::before {
+        content: "Date: ";
+        font-weight: bold;
+    }
+
+    td:nth-of-type(2)::before {
+        content: "Summary: ";
+        font-weight: bold;
+    }
+
+    td:nth-of-type(3)::before {
+        content: "Tags: ";
+        font-weight: bold;
+    }
+
+    td:nth-of-type(4) {
+        padding-top: 16px;
+    }
+
+    /* Full-width delete button */
+    .delete-btn {
+        width: 100%;
+        padding: 12px;
+    }
+
+    /* Adjust tag styling for mobile */
+    .tag {
+        margin: 4px 4px 4px 0;
+    }
 }
