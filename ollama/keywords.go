@@ -40,12 +40,6 @@ func (c *Client) Keywords(text string) ([]string, error) {
 				"keywords",
 			},
 		},
-		// Format: map[string]interface{}{
-		// 	"type": "array",
-		// 	"items": map[string]interface{}{
-		// 		"type": "string",
-		// 	},
-		// },
 		Options: map[string]interface{}{
 			"temperature": 0.1,
 		},
