@@ -8,6 +8,10 @@ type Summary struct {
 
 func (c *Client) Summary(text string) (string, error) {
 
+	if err := c.Pull(); err != nil {
+		return "", err
+	}
+
 	data := ChatRequest{
 		Model:    c.Model,
 		Insecure: true,
@@ -41,13 +45,16 @@ func (c *Client) Summary(text string) (string, error) {
 
 	cr, err := c.Chat(data)
 	if err != nil {
+		createRecord("summary", "error")
 		return "", err
 	}
 
 	var summary Summary
 	err = json.Unmarshal([]byte(cr.Message.Content), &summary)
 	if err != nil {
+		createRecord("summary", "error")
 		return "", err
 	}
+	createRecord("summary", "success")
 	return summary.Summary, nil
 }

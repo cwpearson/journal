@@ -10,6 +10,10 @@ type Keywords struct {
 
 func (c *Client) Keywords(text string) ([]string, error) {
 
+	if err := c.Pull(); err != nil {
+		return nil, err
+	}
+
 	data := ChatRequest{
 		Model:    c.Model,
 		Insecure: true,
@@ -47,6 +51,7 @@ func (c *Client) Keywords(text string) ([]string, error) {
 
 	cr, err := c.Chat(data)
 	if err != nil {
+		createRecord("keywords", "error")
 		return nil, err
 	}
 
@@ -54,8 +59,11 @@ func (c *Client) Keywords(text string) ([]string, error) {
 	// keywords := []string{}
 	err = json.Unmarshal([]byte(cr.Message.Content), &keywords)
 	if err != nil {
+		createRecord("keywords", "error")
 		return nil, err
 	}
+
+	createRecord("keywords", "success")
 	return keywords.Keywords, nil
 	// return keywords, nil
 }

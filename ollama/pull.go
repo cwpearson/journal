@@ -36,6 +36,7 @@ func (c *Client) Pull() error {
 	log.Println(endpoint)
 	req, err := http.NewRequest("POST", endpoint, bytes.NewBuffer(jsonData))
 	if err != nil {
+		createRecord("pull", "error")
 		return err
 	}
 
@@ -46,6 +47,7 @@ func (c *Client) Pull() error {
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
+		createRecord("pull", "error")
 		return err
 	}
 	defer resp.Body.Close()
@@ -57,5 +59,6 @@ func (c *Client) Pull() error {
 	}
 
 	// fmt.Printf("Response: %s\n", string(body))
+	createRecord("pull", "success")
 	return nil
 }

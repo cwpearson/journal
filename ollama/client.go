@@ -1,6 +1,8 @@
 package ollama
 
-import "github.com/cwpearson/journal/config"
+import (
+	"github.com/cwpearson/journal/config"
+)
 
 type Client struct {
 	Url      string

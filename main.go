@@ -35,13 +35,12 @@ func main() {
 	}
 
 	database.Init()
-	database.Get().AutoMigrate(&models.Entry{}, &models.Tag{})
+	database.Get().AutoMigrate(&models.Entry{}, &models.Tag{}, &ollama.Record{})
 	handlers.Init()
 
 	client := ollama.NewClientFromConfig()
 	if err := client.Pull(); err != nil {
 		log.Println(err)
-		return
 	}
 
 	// Initialize Echo
