@@ -14,8 +14,9 @@ func (c *Client) Summary(text string) (string, error) {
 		Stream:   false,
 		Messages: []Message{
 			{
-				Role:    "system",
-				Content: "Short summary of text. Return as JSON.", // llama3.2:3b
+				Role: "system",
+				// Content: "Short summary of text. Return as JSON.", // llama3.2:3b
+				Content: "Very short summary of diary entry, for the author. Address author as \"you.\" Return as JSON.", // llama3.2:3b
 			},
 			{
 				Role:    "user",
